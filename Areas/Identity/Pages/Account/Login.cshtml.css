@@ -1,0 +1,29 @@
+﻿
+body {
+    font-family: "Open Sans", sans-serif;
+    color: #212529;
+}
+/**.loginbutton,  .loginbutton:focus {
+    background: #eb5d1e;
+    color: #fff;
+    padding: 10px 25px;
+    margin-left: 30px;
+    border-radius: 50px;
+}*/
+ .loginbutton:hover {
+    background: #ef7f4d;
+}
+
+.loginbutton{
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 28px;
+    border-radius: 3px;
+    transition: 0.5s;
+    margin-top: 30px;
+    color: #fff;
+    background: #eb5d1e;
+}

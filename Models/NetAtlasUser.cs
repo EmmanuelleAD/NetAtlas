@@ -8,7 +8,8 @@ namespace NetAtlas.Models
     {
         public string Nom { get; set; }
         public string Prenoms { get; set; }
-        public string Statuts { get; set; } = "EnAttente"; 
+        public string Statuts { get; set; } = "EnAttente";
+        public int Warning { get; set; } = 0;
         public  virtual ICollection <DemandeDAmis> ListeDemandes{ get; set; }
         public virtual ICollection<Publication> Publications { get; set; }
     }

@@ -46,8 +46,29 @@ namespace NetAtlas.Controllers
             return View(friendRequest);
         }
 
+        public async Task<IActionResult> InviteFriends(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var membre = await _context.NetAtlasUser.FindAsync(id);
+            if (membre == null)
+            {
+                return NotFound();
 
-        // GET: DemandeDAmis/Details/5
+            }
+            ViewBag.currentUserId=UserManager.GetUserId(User);    
+            ViewBag.Id = id;
+            return View(nameof(Create));
+        }
+        
+      //  [HttpPost]
+      // [ValidateAntiForgeryToken] public async Task<IActionResult> InviteFriends()
+       // {
+       //     return View();
+       // }
+// GET: DemandeDAmis/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -66,8 +87,20 @@ namespace NetAtlas.Controllers
         }
 
         // GET: DemandeDAmis/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync(string? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var membre = await _context.NetAtlasUser.FindAsync(id);
+            if (membre == null)
+            {
+                return NotFound();
+
+            }
+            ViewBag.currentUserId = UserManager.GetUserId(User);
+            ViewBag.Id = id;
             return View();
         }
 
@@ -84,7 +117,7 @@ namespace NetAtlas.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(demandeDAmis);
+            return View(nameof(FriendRequest));
         }
 
         // GET: DemandeDAmis/Edit/5

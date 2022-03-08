@@ -46,6 +46,7 @@ namespace NetAtlas.Data
         public DbSet<NetAtlas.Models.RessourceMessage> RessourceMessage { get; set; }
         public DbSet<NetAtlas.Models.RessourcePhotoVideo> RessourcePhotoVideo { get; set; }
         public DbSet<NetAtlas.Models.NetAtlasUser> NetAtlasUser { get; set; }
+        public DbSet<NetAtlas.Models.Avertissement> Avertissement { get; set; }
 
 
 

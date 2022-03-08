@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,29 +11,23 @@ using NetAtlas.Models;
 
 namespace NetAtlas.Controllers
 {
-    public class PublicationsController : Controller
+    public class AvertissementsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private UserManager<NetAtlasUser> UserManager { get; }
 
-        public PublicationsController(ApplicationDbContext context, UserManager<NetAtlasUser> userManager)
+        public AvertissementsController(ApplicationDbContext context)
         {
             _context = context;
-            UserManager = userManager;
         }
 
-        // GET: Publications
+        // GET: Avertissements
         public async Task<IActionResult> Index()
         {
-            var currentUser = UserManager.GetUserId(User);
-            var listePub = from pub in await _context.Publication.ToListAsync()
-                           where pub.MembreID.Equals(currentUser)
-                           select pub;
-
-            return View(listePub);
+            var applicationDbContext = _context.Avertissement.Include(a => a.NetAtlasUser);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Publications/Details/5
+        // GET: Avertissements/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,47 +35,42 @@ namespace NetAtlas.Controllers
                 return NotFound();
             }
 
-            var publication = await _context.Publication
+            var avertissement = await _context.Avertissement
+                .Include(a => a.NetAtlasUser)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (publication == null)
+            if (avertissement == null)
             {
                 return NotFound();
             }
 
-            return View(publication);
+            return View(avertissement);
         }
 
-        // GET: Publications/Create
+        // GET: Avertissements/Create
         public IActionResult Create()
         {
-            ViewBag.CurrentUserId = UserManager.GetUserId(User);
-            return View();
-        }
-        public IActionResult Choice()
-        {
-           
+            ViewData["NetAtlasUserID"] = new SelectList(_context.NetAtlasUser, "Id", "Id");
             return View();
         }
 
-        // POST: Publications/Create
+        // POST: Avertissements/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,MembreID,statut")] Publication publication)
+        public async Task<IActionResult> Create([Bind("ID,NetAtlasUserID")] Avertissement avertissement)
         {
             if (!ModelState.HasReachedMaxErrors)
             {
-                
-                _context.Add(publication);
+                _context.Add(avertissement);
                 await _context.SaveChangesAsync();
-                ViewBag.PublicationID =publication.ID;
-                return RedirectToAction("Choice");
+                return RedirectToAction(nameof(Index));
             }
-            return View(publication);
+            ViewData["NetAtlasUserID"] = new SelectList(_context.NetAtlasUser, "Id", "Id", avertissement.NetAtlasUserID);
+            return View(avertissement);
         }
 
-        // GET: Publications/Edit/5
+        // GET: Avertissements/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,22 +78,23 @@ namespace NetAtlas.Controllers
                 return NotFound();
             }
 
-            var publication = await _context.Publication.FindAsync(id);
-            if (publication == null)
+            var avertissement = await _context.Avertissement.FindAsync(id);
+            if (avertissement == null)
             {
                 return NotFound();
             }
-            return View(publication);
+            ViewData["NetAtlasUserID"] = new SelectList(_context.NetAtlasUser, "Id", "Id", avertissement.NetAtlasUserID);
+            return View(avertissement);
         }
 
-        // POST: Publications/Edit/5
+        // POST: Avertissements/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,MembreID,statut")] Publication publication)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,NetAtlasUserID")] Avertissement avertissement)
         {
-            if (id != publication.ID)
+            if (id != avertissement.ID)
             {
                 return NotFound();
             }
@@ -114,12 +103,12 @@ namespace NetAtlas.Controllers
             {
                 try
                 {
-                    _context.Update(publication);
+                    _context.Update(avertissement);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PublicationExists(publication.ID))
+                    if (!AvertissementExists(avertissement.ID))
                     {
                         return NotFound();
                     }
@@ -130,10 +119,11 @@ namespace NetAtlas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(publication);
+            ViewData["NetAtlasUserID"] = new SelectList(_context.NetAtlasUser, "Id", "Id", avertissement.NetAtlasUserID);
+            return View(avertissement);
         }
 
-        // GET: Publications/Delete/5
+        // GET: Avertissements/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,30 +131,31 @@ namespace NetAtlas.Controllers
                 return NotFound();
             }
 
-            var publication = await _context.Publication
+            var avertissement = await _context.Avertissement
+                .Include(a => a.NetAtlasUser)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (publication == null)
+            if (avertissement == null)
             {
                 return NotFound();
             }
 
-            return View(publication);
+            return View(avertissement);
         }
 
-        // POST: Publications/Delete/5
+        // POST: Avertissements/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var publication = await _context.Publication.FindAsync(id);
-            _context.Publication.Remove(publication);
+            var avertissement = await _context.Avertissement.FindAsync(id);
+            _context.Avertissement.Remove(avertissement);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PublicationExists(int id)
+        private bool AvertissementExists(int id)
         {
-            return _context.Publication.Any(e => e.ID == id);
+            return _context.Avertissement.Any(e => e.ID == id);
         }
     }
 }

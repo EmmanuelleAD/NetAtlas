@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<NetAtlas.Models.NetAtlasUser>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "InviteFriends";
 }
 
 <h1>Index</h1>
@@ -31,9 +31,7 @@
                 @Html.DisplayFor(modelItem => item.Statuts)
             </td>
             <td>
-                <a asp-controller="DemandeDAmis" asp-action="Create" asp-route-id="@item.Id">Demande d'amis</a> |
-
-                <a asp-action="Edit" asp-route-id="@item.Id">Valider</a> |
+                <a asp-action="InviteFriends" asp-route-id="@item.Id">Invite</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>

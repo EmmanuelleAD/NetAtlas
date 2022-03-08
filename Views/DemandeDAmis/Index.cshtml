@@ -31,6 +31,7 @@
                 @Html.DisplayFor(modelItem => item.Statut)
             </td>
             <td>
+                <a asp-action="InviteFriends" asp-route-id="@item.ID">InviteFriends</a> |
                  
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete friend</a>

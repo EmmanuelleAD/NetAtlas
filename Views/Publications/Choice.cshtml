@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "ChoixPublication";
+}
+
+<h1>Choose</h1>
+
+<h4>Publication 
+    
+</h4>
+<hr />
+<div class="row mb-3"><a class="btn btn-primary" asp-area="" asp-controller="RessourceLiens" asp-action="Create" value=@ViewBag.PublicationID> Publier un lien</a></div>
+<div class="row mb-3"><a class="btn btn-warning" asp-area="" asp-controller="RessourceMessages" asp-action="Create"> Publier un message</a></div>
+<div class="row mb-3"><a class="btn btn-success" asp-area="" asp-controller="RessourcePhotoVideos" asp-action="Create"> Publier une vidéo</a></div>
+

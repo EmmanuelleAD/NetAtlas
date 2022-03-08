@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetAtlas.Data;
 
@@ -11,9 +12,10 @@ using NetAtlas.Data;
 namespace NetAtlas.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220306132830_seePendingModels")]
+    partial class seePendingModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,25 +161,6 @@ namespace NetAtlas.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("NetAtlas.Models.Avertissement", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("NetAtlasUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("NetAtlasUserID");
-
-                    b.ToTable("Avertissement");
-                });
-
             modelBuilder.Entity("NetAtlas.Models.DemandeDAmis", b =>
                 {
                     b.Property<int>("ID")
@@ -268,9 +251,6 @@ namespace NetAtlas.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int>("Warning")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -417,17 +397,6 @@ namespace NetAtlas.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("NetAtlas.Models.Avertissement", b =>
-                {
-                    b.HasOne("NetAtlas.Models.NetAtlasUser", "NetAtlasUser")
-                        .WithMany()
-                        .HasForeignKey("NetAtlasUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("NetAtlasUser");
                 });
 
             modelBuilder.Entity("NetAtlas.Models.DemandeDAmis", b =>

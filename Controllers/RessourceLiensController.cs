@@ -1,8 +1,5 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +11,12 @@ namespace NetAtlas.Controllers
     public class RessourceLiensController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<NetAtlasUser> UserManager { get; }
 
-        public RessourceLiensController(ApplicationDbContext context)
+        public RessourceLiensController(ApplicationDbContext context, UserManager<NetAtlasUser> userManager)
         {
             _context = context;
+            UserManager = userManager;
         }
 
         // GET: RessourceLiens
@@ -47,9 +46,20 @@ namespace NetAtlas.Controllers
         }
 
         // GET: RessourceLiens/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID");
+            var currentUserId = UserManager.GetUserId(User);
+            var publication = new Publication {MembreID=currentUserId ,statut="En Attente"};
+            _context.Publication.Add(publication);
+            await _context.SaveChangesAsync();
+            
+           // var id = from pub in await _context.Publication.ToListAsync()
+           //          select pub.ID;
+           // var idMax = id.Max() ;
+            ViewBag.PublicationID= publication.ID;
+            
+
+            // ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID");
             return View();
         }
 

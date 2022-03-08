@@ -32,6 +32,7 @@ namespace NetAtlas.Controllers
             {
                 return NotFound();
             }
+            ViewBag.id = netAtlasUser.Id;
             return View(netAtlasUser);
 
             
@@ -39,21 +40,38 @@ namespace NetAtlas.Controllers
 
 
         [HttpPost,ActionName("Edit")]
-       // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Prenoms,Statuts")] NetAtlasUser netAtlasUser)
+       [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Nom,Warning,Prenoms,Statuts")] NetAtlasUser netAtlasUser)
         {
-            if (!id.Equals(netAtlasUser.Id) )
+            if (id!=netAtlasUser.Id )
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.HasReachedMaxErrors)
             {
                 try
                 {
-                    _context.Update(netAtlasUser);
-                    await _context.SaveChangesAsync();
+                    var user = _context.NetAtlasUser.Single(e => e.Id == id);
+                    var userEntry = _context.Entry(user).Property("Statuts").CurrentValue =Convert.ToString( Request.Form["Statuts"]);
+                    _context.Entry(user).Property("Statuts").IsModified = true;
+                    //netAtlasUser.Id = id;
+                    //_context.Update(netAtlasUser);
+                    await  _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
                 }
+            /*    catch (DbUpdateConcurrencyException ex)
+                {
+
+
+                    // Update original values from the database 
+                     var entry = ex.Entries.Single();
+                     entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                   // ex.Entries.Single().Reload();
+                    return RedirectToAction(nameof(Index));
+
+                }*/
                 catch
                 {
                     if (!NetAtlasUserExists(netAtlasUser.Id))
@@ -65,7 +83,6 @@ namespace NetAtlas.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
             }
             return View(netAtlasUser);
         }

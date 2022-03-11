@@ -1,0 +1,53 @@
+﻿
+
+@model IEnumerable<RessourceLien>
+<!-- ======= Hero Section ======= <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.contenuLien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomRessource)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>--->
+
+
+
+ <section id="services" class="services section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Liens</h2>
+          <p>Check out the great services we offer</p>
+        </div>
+        @foreach (var item in Model) {
+
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bxl-dribbble"></i></div>
+              <h4 class="title"><a href=""> @Html.DisplayFor(modelItem => item.NomRessource)</a></h4>
+              <a class="description" href=@Html.DisplayFor(modelItem => item.contenuLien)> @Html.DisplayFor(modelItem => item.contenuLien)</a>
+            </div>
+          </div>
+       </div>
+       }
+        
+          
+
+        
+
+        
+
+      </div>
+    </section>

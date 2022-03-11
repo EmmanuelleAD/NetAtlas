@@ -83,7 +83,7 @@ namespace NetAtlas.Controllers
 
             if (ModelState.IsValid)
             {
-                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "PhotosVideos");
+                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/PhotosVideos");
                 if (!Directory.Exists(uploads))
                 {
                     Directory.CreateDirectory(uploads);
@@ -92,7 +92,7 @@ namespace NetAtlas.Controllers
                 if (CheminFichier.Length > 0)
                 {
                     string extension = Path.GetExtension(CheminFichier.FileName).ToLowerInvariant();
-                    if(permittedExtensionsPhotos.Contains(extension)||permittedExtensionsVideos.Contains(extension))
+                    if(permittedExtensionsPhotos.Contains(extension))
                     { 
                     var fileName = $"{Guid.NewGuid()}.{CheminFichier.FileName}";
                     using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
@@ -100,17 +100,34 @@ namespace NetAtlas.Controllers
                         await CheminFichier.CopyToAsync(fileStream);
                       //  partner.ImgPath = $"/uploads/participants/{fileName}";
                     }
-                    var ressourcePhotoVideo = new RessourcePhotoVideo { CheminFichier = $"/PhotosVideos/{fileName}", PublicationID = Convert.ToInt32(Request.Form["PublicationID"]), NomRessource = "PhotoVideos", taille = Convert.ToDouble(Request.Form["taille"]) };
+                    var ressourcePhotoVideo = new RessourcePhotoVideo { CheminFichier = $"/PhotosVideos/{fileName}", PublicationID = Convert.ToInt32(Request.Form["PublicationID"]), NomRessource = "PhotoVideos", taille = Convert.ToDouble(Request.Form["taille"]),Type="Photo" };
                     _context.Add(ressourcePhotoVideo);
                     await _context.SaveChangesAsync();
                    // ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID", ressourcePhotoVideo.PublicationID);
 
                     return RedirectToAction(nameof(Index));
                     }
+                    else if (permittedExtensionsVideos.Contains(extension))
+                    {
+                        var fileName = $"{Guid.NewGuid()}.{CheminFichier.FileName}";
+                        using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                        {
+                            await CheminFichier.CopyToAsync(fileStream);
+                            //  partner.ImgPath = $"/uploads/participants/{fileName}";
+                        }
+                        var ressourcePhotoVideo = new RessourcePhotoVideo { CheminFichier = $"/PhotosVideos/{fileName}", PublicationID = Convert.ToInt32(Request.Form["PublicationID"]), NomRessource = "PhotoVideos", taille = Convert.ToDouble(Request.Form["taille"]), Type = "Video" };
+                        _context.Add(ressourcePhotoVideo);
+                        await _context.SaveChangesAsync();
+                        // ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID", ressourcePhotoVideo.PublicationID);
+
+                        return RedirectToAction(nameof(Index));
+
+                    }
                 }
 
                 
             }
+           
             return View();
         }
 

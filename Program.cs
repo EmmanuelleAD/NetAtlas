@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NetAtlas.Authorisation;
 using NetAtlas.Data;
 using NetAtlas.Models;
@@ -13,9 +14,11 @@ builder.Services.AddDbContext<NetAtlasContext>(options =>
     options.UseSqlServer(connectionString));builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//, options.SignIn.RequireConfirmedEmail = true
 
-
-builder.Services.AddDefaultIdentity<NetAtlasUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
+builder.Services.AddDefaultIdentity<NetAtlasUser>(options => { options.SignIn.RequireConfirmedAccount = false;// options.SignIn.RequireConfirmedEmail = true;
+})
+    .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
        
 builder.Services.AddControllersWithViews();

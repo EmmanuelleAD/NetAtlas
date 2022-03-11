@@ -1,0 +1,89 @@
+﻿
+@model IEnumerable<RessourcePhotoVideo>
+@{
+   
+}
+<!-- =<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CheminFichier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.taille)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomRessource)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publication)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheminFichier)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.taille)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomRessource)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publication.MembreID)
+            </td>
+           
+        </tr>
+}
+    </tbody>
+</table>
+
+-->
+
+<section id="services" class="services section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Photos Videos</h2>
+          <p>Check out the great services we offer</p>
+        </div>
+        @foreach (var item in Model) {
+            
+
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bxl-dribbble"></i></div>
+              <h4 class="title"><a href=""> @Html.DisplayFor(modelItem => item.NomRessource)</a></h4>
+                  
+              @if(item.Type=="Photo")
+              {
+              <img class="description" src=@Html.DisplayFor(modelItem => item.CheminFichier)>
+              }
+              @if(item.Type=="Video")
+              {
+                   <iframe width="560" 
+                height="315" 
+                src=@Html.DisplayFor(modelItem => item.CheminFichier)
+                frameborder="0" 
+                allowfullscreen></iframe>
+
+              }
+
+            </div>
+          </div>
+       </div>
+       }
+        
+          
+
+        
+
+        
+
+      </div>
+    </section>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -23,8 +23,17 @@
 
   <ItemGroup>
     <Folder Include="Areas\Files\" />
-    <Folder Include="PhotosVideos\" />
+    <Folder Include="wwwroot\PhotosVideos\" />
     <Folder Include="Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\PhotosVideos\5c9e209d-3f90-4a2f-bdf8-f92862ca642f.PXL_20220110_105757261.jpg" />
+    <None Include="wwwroot\PhotosVideos\79b38269-ac33-4bc6-b0b6-bdb21dc28f62.canstockphoto17955778.jpg" />
+    <None Include="wwwroot\PhotosVideos\87a876c3-ad1f-41ec-bb8b-90b946b01db0.PXL_20220110_112951434 %281%29.jpg" />
+    <None Include="wwwroot\PhotosVideos\bf1b9255-2488-4fbd-875c-da653d184590.PXL_20220110_105757261.jpg" />
+    <None Include="wwwroot\PhotosVideos\c41e932a-6f64-4f64-9a2b-392f12085eb6.How_to_create_Custom_Login_Registration_in_Asp.Net_MVC_5_%28Code_First%29_Part_3%28360p%29.mp4" />
+    <None Include="wwwroot\PhotosVideos\d5847f6c-7bd4-429c-885f-2e523662d4b7.corriges.pdf" />
   </ItemGroup>
 
 </Project>

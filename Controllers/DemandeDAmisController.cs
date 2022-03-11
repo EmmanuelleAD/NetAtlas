@@ -17,7 +17,7 @@ namespace NetAtlas.Controllers
     public class DemandeDAmisController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private UserManager<NetAtlasUser> UserManager { get;  }    
+        private UserManager<NetAtlasUser> UserManager { get;  }
 
         public DemandeDAmisController(ApplicationDbContext context, UserManager<NetAtlasUser> userManager)
         {
@@ -45,22 +45,34 @@ namespace NetAtlas.Controllers
                             select dem;
             return View(friendRequest);
         }
-
-        public async Task<IActionResult> InviteFriends(int? id)
+        public async Task<IActionResult> FriendRequestSend()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var membre = await _context.NetAtlasUser.FindAsync(id);
-            if (membre == null)
-            {
-                return NotFound();
+            var currentUser = UserManager.GetUserId(User);
+            var friendRequest = from dem in
+               await _context.DemandeDAmis.ToListAsync()
+                                where dem.Amis1ID.Equals(currentUser) && dem.Statut == "En Attente"
+                                select dem;
+            return View(friendRequest);
+        }
 
-            }
-            ViewBag.currentUserId=UserManager.GetUserId(User);    
-            ViewBag.Id = id;
-            return View(nameof(Create));
+        public async Task<IActionResult> InviteFriends()
+        {
+            var currentUser = UserManager.GetUserId(User);
+           var x=from dem in await _context.DemandeDAmis.ToListAsync()
+                where dem.Amis1ID.Equals(currentUser) && (dem.Statut == "En Attente" ||dem.Statut == "Accepté")
+                select dem.Amis2ID;
+            var y=from dema in
+             await _context.DemandeDAmis.ToListAsync()
+                  where (dema.Amis2ID.Equals(currentUser) ) && dema.Statut == "Accepté"
+                  select dema.Amis1ID;
+           // var membres = await _context.NetAtlasUser.ToListAsync();
+            var amisPossibles=from us in await _context.NetAtlasUser.ToListAsync()
+                 where !x.Contains(us.Id) && !y.Contains(us.Id) &&(!us.Id.Equals(currentUser))
+                 select us;
+
+
+            
+            return View(amisPossibles);
         }
         
       //  [HttpPost]
@@ -115,9 +127,9 @@ namespace NetAtlas.Controllers
             {
                 _context.Add(demandeDAmis);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(FriendRequestSend));
             }
-            return View(nameof(FriendRequest));
+            return View(demandeDAmis);
         }
 
         // GET: DemandeDAmis/Edit/5

@@ -18,9 +18,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
+    <PackageReference Include="SendGrid" Version="9.26.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Files\" />
+    <Folder Include="PhotosVideos\" />
     <Folder Include="Pages\" />
   </ItemGroup>
 

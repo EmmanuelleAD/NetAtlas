@@ -6,6 +6,7 @@ using NetAtlas.Models;
 
 namespace NetAtlas.Controllers
 {
+    [Authorize]
     public class NetAtlasUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,6 +18,8 @@ namespace NetAtlas.Controllers
       //  [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
+            var isAdmin = User.IsInRole("Administrators");
+            ViewBag.isAdmin=isAdmin;
             return View(await _context.NetAtlasUser.ToListAsync());
         }
         public async Task<IActionResult> Edit(string? id)

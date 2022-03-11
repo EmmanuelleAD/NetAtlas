@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="NetAtlasUserID" class="control-label"></label>
-                <select asp-for="NetAtlasUserID" class ="form-control" asp-items="ViewBag.NetAtlasUserID"></select>
+                <input asp-for="NetAtlasUserID" class ="form-control" value=@ViewBag.id></input>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

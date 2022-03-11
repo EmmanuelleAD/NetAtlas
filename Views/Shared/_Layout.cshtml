@@ -39,13 +39,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                              <li class="nav-item">
+                                  <a class="nav-link text-dark" asp-area="" asp-controller="NetAtlasUsers" asp-action="Index"> NetAtlasUsersList</a>
+                                  </li>
+
     
                          <li class="nav-item dropdown"><a href="#"><span>Gestion Amitiés</span> <i class="bi bi-chevron-right"></i></a>
                                <ul>
-                              <li><a class="nav-link text-dark" asp-area="" asp-controller="NetAtlasUsers" asp-action="Index">InvitationsAmis</a></li>
-                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="Index">ListeAmis</a></li>
-                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="FriendRequest"> ListeDemandes</a></li>
-                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="Delete">SupressionAmis</a></li>
+                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="InviteFriends">Invite a Friend</a></li>
+                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="Index">Friends List</a></li>
+                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="FriendRequest"> FriendRequestReceipt</a></li>
+                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="FriendRequestSend"> FriendRequestSend</a></li>
+
+                              <li><a class="nav-link text-dark" asp-area="" asp-controller="DemandeDAmis" asp-action="Delete">Delete Friends</a></li>
                              
                               </ul>
                          </li>

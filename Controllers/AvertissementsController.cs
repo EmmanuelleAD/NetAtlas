@@ -47,9 +47,20 @@ namespace NetAtlas.Controllers
         }
 
         // GET: Avertissements/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(string? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var membreAAvertir = await _context.NetAtlasUser.FindAsync(id);
+            if(membreAAvertir == null)
+            {
+                return NotFound();
+            }
             ViewData["NetAtlasUserID"] = new SelectList(_context.NetAtlasUser, "Id", "Id");
+            ViewBag.id = membreAAvertir.Id;
+
             return View();
         }
 
@@ -62,7 +73,11 @@ namespace NetAtlas.Controllers
         {
             if (!ModelState.HasReachedMaxErrors)
             {
+
                 _context.Add(avertissement);
+                var user = _context.NetAtlasUser.Single(e => e.Id == avertissement.NetAtlasUserID);
+                var userEntry = _context.Entry(user).Property("Warning").CurrentValue=Convert.ToInt32(_context.Entry(user).Property("Warning").CurrentValue ) +1;
+                _context.Entry(user).Property("Warning").IsModified = true;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

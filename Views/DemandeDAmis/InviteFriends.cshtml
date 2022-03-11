@@ -23,17 +23,18 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+   
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Prenoms)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Statuts)
+                @Html.DisplayFor(modelItem => item.Nom)
             </td>
             <td>
-                <a asp-action="InviteFriends" asp-route-id="@item.Id">Invite</a> |
+                <a asp-action="Create" asp-route-id="@item.Id">Invite friends</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                
             </td>
         </tr>
 }

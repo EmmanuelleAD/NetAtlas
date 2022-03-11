@@ -362,6 +362,10 @@ namespace NetAtlas.Data.Migrations
                 {
                     b.HasBaseType("NetAtlas.Models.Ressource");
 
+                    b.Property<string>("CheminFichier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("taille")
                         .HasColumnType("float");
 

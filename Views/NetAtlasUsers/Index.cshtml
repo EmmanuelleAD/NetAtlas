@@ -32,10 +32,16 @@
             </td>
             <td>
                 <a asp-controller="DemandeDAmis" asp-action="Create" asp-route-id="@item.Id">Demande d'amis</a> |
-
-                <a asp-action="Edit" asp-route-id="@item.Id">Valider</a> |
+                    @if (@ViewBag.isAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Valider</a> 
+                   
+                    }
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @if(@ViewBag.isAdmin)
+                {
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
             </td>
         </tr>
 }

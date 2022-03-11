@@ -10,11 +10,16 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="CheminFichier" class="control-label"></label>
+                <input asp-for="CheminFichier" type="file" class="form-control" />
+                <span asp-validation-for="CheminFichier" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="taille" class="control-label"></label>
-                <input asp-for="taille" class="form-control" />
+                <input asp-for="taille" class="form-control" value=0 />
                 <span asp-validation-for="taille" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PublicationID" class="control-label"></label>
-                <input asp-for="PublicationID" class ="form-control" value=@ViewBag.PublicationID></input>
+                <input asp-for="PublicationID" class ="form-control" value="@ViewBag.PublicationID">
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

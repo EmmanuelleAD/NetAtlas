@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.CheminFichier)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.taille)
             </th>
             <th>
@@ -27,6 +30,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheminFichier)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.taille)
             </td>

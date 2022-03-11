@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +12,7 @@ using NetAtlas.Data;
 using NetAtlas.Models;
 
 namespace NetAtlas.Controllers
-{
+{ [Authorize]
     public class PublicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,8 +29,17 @@ namespace NetAtlas.Controllers
         {
             var currentUser = UserManager.GetUserId(User);
             var listePub = from pub in await _context.Publication.ToListAsync()
-                           where pub.MembreID.Equals(currentUser)
+                          // where pub.MembreID.Equals(currentUser)
                            select pub;
+            var isManager = User.IsInRole("Managers");
+            if (!isManager)
+            {
+                listePub = listePub.Where(p => p.statut == "En Attente" || p.MembreID == currentUser);
+
+            }
+            var isAdmin = User.IsInRole("Administrators");
+            ViewBag.isAdmin=isAdmin;
+            ViewBag.isManager = isManager;
 
             return View(listePub);
         }
@@ -55,7 +65,9 @@ namespace NetAtlas.Controllers
         // GET: Publications/Create
         public IActionResult Create()
         {
-            ViewBag.CurrentUserId = UserManager.GetUserId(User);
+            
+                var CurrentUserId = UserManager.GetUserId(User);
+            ViewBag.CurrentUserId=CurrentUserId;
             return View();
         }
         public IActionResult Choice()

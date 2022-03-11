@@ -15,18 +15,25 @@ namespace NetAtlas.Controllers
     public class RessourcePhotoVideosController : Controller
     {
         private readonly ApplicationDbContext _context;
-         private UserManager<NetAtlasUser> UserManager { get; }
+        private UserManager<NetAtlasUser> UserManager { get; }
+        private static  string[] permittedExtensionsPhotos = { ".jpg", ".png","jpeg" };
+        private static string[] permittedExtensionsVideos = { ".mp4", "." };
+
+
+
 
         public RessourcePhotoVideosController(ApplicationDbContext context, UserManager<NetAtlasUser> userManager)
         {
             _context = context;
-            UserManager = userManager;  
+            UserManager = userManager;
         }
 
         // GET: RessourcePhotoVideos
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.RessourcePhotoVideo.Include(r => r.Publication);
+            var isAuthorized = User.IsInRole("Administrators") || User.IsInRole("Managers");
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -57,9 +64,7 @@ namespace NetAtlas.Controllers
             _context.Publication.Add(publication);
             await _context.SaveChangesAsync();
 
-            // var id = from pub in await _context.Publication.ToListAsync()
-            //          select pub.ID;
-            // var idMax = id.Max() ;
+           
             ViewBag.PublicationID = publication.ID;
 
             //ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID");
@@ -71,16 +76,42 @@ namespace NetAtlas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("taille,ID,NomRessource,PublicationID")] RessourcePhotoVideo ressourcePhotoVideo)
+        public async Task<IActionResult> Create(IFormFile CheminFichier,float taille,string NomRessource,int PublicationID)
         {
-            if (!ModelState.HasReachedMaxErrors)
+
+        //var ext = Path.GetExtension(uploadedFileName).ToLowerInvariant();
+
+            if (ModelState.IsValid)
             {
-                _context.Add(ressourcePhotoVideo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "PhotosVideos");
+                if (!Directory.Exists(uploads))
+                {
+                    Directory.CreateDirectory(uploads);
+                }
+
+                if (CheminFichier.Length > 0)
+                {
+                    string extension = Path.GetExtension(CheminFichier.FileName).ToLowerInvariant();
+                    if(permittedExtensionsPhotos.Contains(extension)||permittedExtensionsVideos.Contains(extension))
+                    { 
+                    var fileName = $"{Guid.NewGuid()}.{CheminFichier.FileName}";
+                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                    {
+                        await CheminFichier.CopyToAsync(fileStream);
+                      //  partner.ImgPath = $"/uploads/participants/{fileName}";
+                    }
+                    var ressourcePhotoVideo = new RessourcePhotoVideo { CheminFichier = $"/PhotosVideos/{fileName}", PublicationID = Convert.ToInt32(Request.Form["PublicationID"]), NomRessource = "PhotoVideos", taille = Convert.ToDouble(Request.Form["taille"]) };
+                    _context.Add(ressourcePhotoVideo);
+                    await _context.SaveChangesAsync();
+                   // ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID", ressourcePhotoVideo.PublicationID);
+
+                    return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                
             }
-            ViewData["PublicationID"] = new SelectList(_context.Publication, "ID", "MembreID", ressourcePhotoVideo.PublicationID);
-            return View(ressourcePhotoVideo);
+            return View();
         }
 
         // GET: RessourcePhotoVideos/Edit/5
@@ -105,7 +136,7 @@ namespace NetAtlas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("taille,ID,NomRessource,PublicationID")] RessourcePhotoVideo ressourcePhotoVideo)
+        public async Task<IActionResult> Edit(int id, [Bind("CheminFichier,taille,ID,NomRessource,PublicationID")] RessourcePhotoVideo ressourcePhotoVideo)
         {
             if (id != ressourcePhotoVideo.ID)
             {
